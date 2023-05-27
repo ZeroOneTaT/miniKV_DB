@@ -1,7 +1,7 @@
 /*
  * @Author: ZeroOneTaT
  * @Date: 2023-05-27 21:25:01
- * @LastEditTime: 2023-05-27 22:07:10
+ * @LastEditTime: 2023-05-27 23:38:30
  * @FilePath: /miniKV/src/log/log.cc
  * @Description: 日志模块实现
  *
@@ -33,7 +33,7 @@ namespace minikvdb
     }
 
     // Log初始化函数
-    bool Log::init(const char *file_name, int close_log, int log_buf_size = 8192, int split_lines = 5000000)
+    bool Log::init(const char *file_name, int close_log, int log_buf_size, int split_lines)
     {
         // 参数初始化
         m_close_log = close_log;

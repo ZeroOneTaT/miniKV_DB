@@ -1,7 +1,7 @@
 /*
  * @Author: ZeroOneTaT
  * @Date: 2023-05-27 21:08:34
- * @LastEditTime: 2023-05-27 21:34:54
+ * @LastEditTime: 2023-05-27 23:57:54
  * @FilePath: /miniKV/src/log/log.h
  * @Description: 日志模块定义
  *
@@ -57,6 +57,8 @@ namespace minikvdb
          */
         void flush(void);
 
+        int get_close_log() { return m_close_log; }
+
     private:
         Log();
         virtual ~Log();
@@ -75,30 +77,31 @@ namespace minikvdb
         int m_close_log;   // 关闭日志
     };
 
-#define LOG_DEBUG(format, ...)                                    \
-    if (0 == m_close_log)                                         \
-    {                                                             \
-        Log::get_instance()->write_log(0, format, ##__VA_ARGS__); \
-        Log::get_instance()->flush();                             \
-    }
-#define LOG_INFO(format, ...)                                     \
-    if (0 == m_close_log)                                         \
-    {                                                             \
-        Log::get_instance()->write_log(1, format, ##__VA_ARGS__); \
-        Log::get_instance()->flush();                             \
-    }
-#define LOG_WARN(format, ...)                                     \
-    if (0 == m_close_log)                                         \
-    {                                                             \
-        Log::get_instance()->write_log(2, format, ##__VA_ARGS__); \
-        Log::get_instance()->flush();                             \
-    }
-#define LOG_ERROR(format, ...)                                    \
-    if (0 == m_close_log)                                         \
-    {                                                             \
-        Log::get_instance()->write_log(3, format, ##__VA_ARGS__); \
-        Log::get_instance()->flush();                             \
-    }
 }
+
+#define LOG_DEBUG(format, ...)                                              \
+    if (0 == minikvdb::Log::get_instance()->get_close_log())                                 \
+    {                                                                       \
+        minikvdb::Log::get_instance()->write_log(0, format, ##__VA_ARGS__); \
+        minikvdb::Log::get_instance()->flush();                             \
+    }
+#define LOG_INFO(format, ...)                                               \
+    if (0 == minikvdb::Log::get_instance()->get_close_log())                \
+    {                                                                       \
+        minikvdb::Log::get_instance()->write_log(1, format, ##__VA_ARGS__); \
+        minikvdb::Log::get_instance()->flush();                             \
+    }
+#define LOG_WARN(format, ...)                                               \
+    if (0 == minikvdb::Log::get_instance()->get_close_log())                \
+    {                                                                       \
+        minikvdb::Log::get_instance()->write_log(2, format, ##__VA_ARGS__); \
+        minikvdb::Log::get_instance()->flush();                             \
+    }
+#define LOG_ERROR(format, ...)                                              \
+    if (0 == minikvdb::Log::get_instance()->get_close_log())                \
+    {                                                                       \
+        minikvdb::Log::get_instance()->write_log(3, format, ##__VA_ARGS__); \
+        minikvdb::Log::get_instance()->flush();                             \
+    }
 
 #endif
