@@ -1,3 +1,3 @@
 # miniKV_DB
-![AppVeyor](https://img.shields.io/appveyor/build/ZeroOneTaT/miniKV_DB?logoColor=green)
+![Mozilla Add-on](https://img.shields.io/amo/v/1.0?color=green&label=miniKV_DB&logoColor=green)
 ## 介绍
