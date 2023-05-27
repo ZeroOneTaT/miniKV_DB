@@ -1,3 +1,15 @@
 # miniKV_DB
-![Mozilla Add-on](https://img.shields.io/amo/v/1.0?color=green&label=miniKV_DB&logoColor=green)
-## 介绍
+
+***
+## 项目介绍
+miniKV_DB是一款基于LSM架构的列存Key-Value数据库存储引擎。
+Note: 该项目仅供学习研究使用，并不具备商业价值。
+***
+## 项目进度
+- [ ] 跳表
+***
+## 项目介绍
+敬请期待！！
+***
+## 项目使用
+敬请期待！！！
