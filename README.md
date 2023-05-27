@@ -1,3 +1,3 @@
 # miniKV_DB
-https://github.com/zeroonetat/miniKV_DB/actions/workflows/cmake-unittest.yml/badge.svg
+![AppVeyor](https://img.shields.io/appveyor/build/ZeroOneTaT/miniKV_DB?logoColor=green)
 ## 介绍
