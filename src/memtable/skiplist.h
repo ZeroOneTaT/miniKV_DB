@@ -1,7 +1,7 @@
 /*
  * @Author: ZeroOneTaT
  * @Date: 2023-05-28 17:46:34
- * @LastEditTime: 2023-05-29 16:39:15
+ * @LastEditTime: 2023-05-29 17:23:20
  * @FilePath: /miniKV/src/memtable/skiplist.h
  * @Description: 跳表实现
  *
@@ -18,9 +18,10 @@
 #include <utility>
 #include <iostream>
 #include <optional>
+#include <cassert>
 
-#include "log/log.h"
-#include "memory/default_alloc.h"
+#include "../log/log.h"
+#include "../memory/default_alloc.h"
 #include "random.h"
 
 #ifndef MINIKVDB_SKIPLIST_H
@@ -166,8 +167,6 @@ namespace minikvdb
         int64_t mem_usage = 0;     // kv键值对所占用的内存大小，单位：Byte
         Comparator const compare_; // 比较函数
         Random rand_;              // 随机数
-
-        std::shared_ptr<Log> logger;
     };
 
     /*================================================================
@@ -348,8 +347,8 @@ namespace minikvdb
         }
 
         // 更新内存占用
-        mem_usage -= key.size();
-        mem_usage -= prev[0]->next[0]->value.size(); // prev[0]->next[0]指向待删除的节点
+        mem_usage -= sizeof(key);
+        mem_usage -= sizeof(prev[0]->next[0]->value); // prev[0]->next[0]指向待删除的节点
 
         for (int i = 0; i < level_of_target_node; ++i)
         {
@@ -491,7 +490,7 @@ namespace minikvdb
 
         static const unsigned int kBranching = 4;
         int level = 1;
-        while (level < kMaxHeight && rnd_.OneIn(kBranching))
+        while (level < kMaxHeight && rand_.OneIn(kBranching))
         {
             ++level;
         }
@@ -503,14 +502,14 @@ namespace minikvdb
     template <typename Key, typename Value, class Comparator>
     SkipList<Key, Value, Comparator>::SkipList(Comparator cmp, std::shared_ptr<DefaultAlloc> alloc)
         : compare_(cmp),
-          alloc(std::move(alloc))
+          alloc(std::move(alloc)),
+          rand_(0xdeadbeef)
     {
-        rand_ = 0xdeadbeef;
-        head_ = NewNode("", kMaxHeight, "");
+        head_ = NewNode(Key(), kMaxHeight, Value());
         max_level = 1;
         size = 0;
         mem_usage = 0;
-        logger = Log::get_instance()->init("./MinikvLog", 0, 2000, 800000);
+        Log::get_instance()->init("./MinikvLog", 0, 2000, 800000);
     }
 }
 #endif
