@@ -17,6 +17,6 @@ file(GLOB_RECURSE SRC
         src/utils/*.h)
 
 file(GLOB_RECURSE SRC_TEST
-            test/*.cc)
+            test/test_skiplist.cc)
 
-add_executable(test_log ${SRC} ${SRC_TEST})
+add_executable(test_skiplist ${SRC} ${SRC_TEST})
