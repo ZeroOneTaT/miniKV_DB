@@ -8,6 +8,12 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
 
 
+# gtest
+find_package(GTest REQUIRED)
+include_directories(${GTest_INCLUDE_DIRS})
+
+include_directories(src)
+
 file(GLOB_RECURSE SRC
         src/log/*.cc
         src/log/*.h
@@ -17,6 +23,7 @@ file(GLOB_RECURSE SRC
         src/utils/*.h)
 
 file(GLOB_RECURSE SRC_TEST
-            test/test_skiplist.cc)
+            test/*.cc)
 
-add_executable(test_skiplist ${SRC} ${SRC_TEST})
+add_executable(minikvdb-unitest ${SRC} ${SRC_TEST})
+target_link_libraries(minikvdb-unitest PRIVATE gtest pthread)
