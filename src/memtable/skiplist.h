@@ -1,7 +1,7 @@
 /*
  * @Author: ZeroOneTaT
  * @Date: 2023-05-28 17:46:34
- * @LastEditTime: 2023-05-29 17:23:20
+ * @LastEditTime: 2023-05-30 18:01:21
  * @FilePath: /miniKV/src/memtable/skiplist.h
  * @Description: 跳表实现
  *
@@ -297,7 +297,8 @@ namespace minikvdb
         }
         --size;
 
-        std::vector<Node *> prev(GetCurrentHeight(), nullptr);
+        // std::vector<Node *> prev(GetCurrentHeight(), nullptr);
+        std::vector<Node *> prev(kMaxHeight, nullptr);
 
         int level = GetCurrentHeight() - 1;
         auto cur = head_;
@@ -347,8 +348,10 @@ namespace minikvdb
         }
 
         // 更新内存占用
-        mem_usage -= sizeof(key);
-        mem_usage -= sizeof(prev[0]->next[0]->value); // prev[0]->next[0]指向待删除的节点
+        // mem_usage -= sizeof(key);
+        // mem_usage -= sizeof(prev[0]->next[0]->value); // prev[0]->next[0]指向待删除的节点
+        mem_usage -= (typeid(key) == typeid(std::string) ? key.size() : sizeof(key));
+        mem_usage -= (typeid(prev[0]->next[0]->value) == typeid(std::string) ? prev[0]->next[0]->value.size() : sizeof(prev[0]->next[0]->value));
 
         for (int i = 0; i < level_of_target_node; ++i)
         {
@@ -415,11 +418,15 @@ namespace minikvdb
         }
         // 更新size
         ++size;
-        // 更新mem_usage
-        mem_usage += sizeof(key);
-        mem_usage += sizeof(value);
 
-        std::vector<Node *> prev(GetCurrentHeight(), nullptr);
+        // 更新mem_usage
+        // mem_usage += sizeof(key);
+        // mem_usage += sizeof(value);
+        mem_usage += (typeid(key) == typeid(std::string) ? key.size() : sizeof(key));
+        mem_usage += (typeid(value) == typeid(std::string) ? value.size() : sizeof(value));
+
+        // std::vector<Node *> prev(GetCurrentHeight(), nullptr);
+        std::vector<Node *> prev(kMaxHeight, nullptr);
 
         // 找到key的前缀节点，并且存到prev中
         FindPrevNode(key, prev);
